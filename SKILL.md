@@ -1,6 +1,6 @@
 ---
 name: appscreen
-description: Use when generating App Store or Google Play marketing screenshots from raw app captures. Smarter than generic: Vision-based auto-analysis first, 5-question intake (not 15), Chinese/English bilingual copy, 5 named design styles, mascot/IP support, auto screenshot renaming. Triggers on: app store screenshots, 应用市场截图, 应用商店宣传图, store listing images, marketing screenshots.
+description: Use when generating App Store or Google Play marketing screenshots from raw app captures. Smarter than generic: Vision-based auto-analysis first, iTunes API auto-lookup (name or App ID → icon + metadata), 5-question intake (not 15), Chinese/English bilingual copy, 5 named design styles, mascot/IP support, auto screenshot renaming. Triggers on: app store screenshots, 应用市场截图, 应用商店宣传图, store listing images, marketing screenshots.
 ---
 
 # AppScreen — 应用商店截图生成器
@@ -9,7 +9,7 @@ description: Use when generating App Store or Google Play marketing screenshots 
 
 **截图是广告，不是说明书。** 每张截图只卖一个感受或结果。用视觉说服，用文字确认。
 
-**工作流程：分析截图 → 5问答 → 确认文案 → 搭建项目 → 构建 → 导出**
+**工作流程：分析截图 → [iTunes 自动补全] → 5问答 → 确认文案 → 搭建项目 → 构建 → 导出**
 
 ---
 
@@ -50,7 +50,98 @@ description: Use when generating App Store or Google Play marketing screenshots 
 
 **以上是输出格式模板。实际内容完全基于用户上传的截图，由 Vision 分析得出，不得使用任何预设内容。**
 
-然后立即进入 Phase 1 提问。
+然后立即进入 Phase 0.5。
+
+---
+
+## Phase 0.5：iTunes API 自动补全（可选，用户提供 App ID 或 App 名称时执行）
+
+如果用户在截图之外**同时提供了 App ID（纯数字）或 App 名称**，在进入 Phase 1 之前先执行此步骤。
+
+### 0.5.1 触发条件
+
+| 用户输入形式 | 示例 | 处理方式 |
+|------------|------|---------|
+| 纯数字 App ID | `6464476667` | 直接 Lookup |
+| App 名称字符串 | `"Home AI"` / `Home AI` | Search 后让用户确认 |
+| 两者都没提供 | — | 跳过此步，进入 Phase 1 |
+
+### 0.5.2 按 App ID 查询（Lookup）
+
+```bash
+curl -s "https://itunes.apple.com/lookup?id=<APP_ID>&country=cn" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+if d['resultCount'] == 0:
+    print('NOT_FOUND')
+else:
+    r = d['results'][0]
+    print('NAME:', r.get('trackName',''))
+    print('ICON:', r.get('artworkUrl512',''))
+    print('GENRE:', r.get('primaryGenreName',''))
+    print('DESC:', r.get('description','')[:200])
+    print('SELLER:', r.get('sellerName',''))
+    print('URL:', r.get('trackViewUrl',''))
+"
+```
+
+### 0.5.3 按名称搜索（Search）
+
+```bash
+curl -s "https://itunes.apple.com/search?term=<URL_ENCODED_NAME>&entity=software&country=cn&limit=5" | python3 -c "
+import sys, json, urllib.parse
+d = json.load(sys.stdin)
+for i, r in enumerate(d.get('results', [])):
+    print(f\"{i+1}. [{r['trackId']}] {r['trackName']} — {r.get('primaryGenreName','')} ({r.get('sellerName','')})\")
+"
+```
+
+搜到多个结果时，把列表展示给用户，让用户选择序号后再执行 Lookup。
+
+### 0.5.4 自动下载图标
+
+确认 App 后，把 512×512 图标下载到项目 `public/` 目录（若项目目录尚未创建则先记录，搭建时补拷）：
+
+```bash
+curl -s "<ICON_URL>" -o public/app-icon.png
+echo "图标已保存 → public/app-icon.png"
+```
+
+### 0.5.5 输出格式
+
+```
+🍎 iTunes 查询结果
+
+App 名称：[trackName]
+品类：[primaryGenreName]
+开发商：[sellerName]
+App Store：[trackViewUrl]
+图标：✅ 已下载至 public/app-icon.png
+
+📝 简介预览（前 200 字）：
+[description 前 200 字]
+```
+
+### 0.5.6 将 iTunes 数据带入 Phase 1
+
+iTunes 查到的字段会**自动预填**以下问题，直接跳过：
+
+| Phase 1 问题 | iTunes 来源字段 | 预填值 |
+|------------|--------------|--------|
+| Q1 APP 名称 | `trackName` | 直接使用 |
+| 可选"有图标吗" | `artworkUrl512` | 已下载，无需再问 |
+
+`primaryGenreName` 用于辅助推荐 Phase 1 Q5 的风格（不强制，仅作参考）：
+
+| 品类关键词 | 推荐风格 |
+|----------|---------|
+| Games / Entertainment | `dark-premium` 或 `gradient-vivid` |
+| Health & Fitness / Medical | `warm-playful` 或 `flat-pastel` |
+| Finance / Business | `clean-minimal` 或 `dark-premium` |
+| Lifestyle / Social | `gradient-vivid` 或 `flat-pastel` |
+| Productivity / Utilities | `clean-minimal` |
+
+`description` 在 Phase 2 文案生成时作为参考背景，**不直接出现在宣传图文案中**。
 
 ---
 
@@ -59,18 +150,18 @@ description: Use when generating App Store or Google Play marketing screenshots 
 ```
 分析完成！只需回答 5 个问题，我就能直接开始：
 
-1. APP 名称是什么？
+1. APP 名称是什么？（若已通过 iTunes 自动获取，跳过此问）
 2. 目标平台：App Store / Google Play / 两个都要？
 3. 文案语言：中文 / 英文 / 中英双语？
 4. 要几张宣传图？（推荐 X 张，基于分析）
-5. 视觉风格选一个：
+5. 视觉风格选一个：（若 iTunes 品类可推断，在选项旁标注★推荐）
    · warm-playful   温暖可爱（奶油色+自然绿，适合角色IP类）
    · clean-minimal  干净极简（白底几何，工具类/效率类）
    · dark-premium   深色高级（深底+光晕，科技/游戏/财务）
    · gradient-vivid 渐变鲜艳（强饱和渐变，社交/娱乐/年轻化）
    · flat-pastel    马卡龙扁平（粉嫩治愈，健康/生活/女性向）
 
-可选：有 APP 图标吗？有品牌 IP 形象吗？
+可选：有品牌 IP 形象吗？（图标已通过 iTunes 自动获取时，无需再上传图标）
 ```
 
 **不确定的项目，用户可以说"你来决定"，我根据截图风格自主判断。**
