@@ -38,6 +38,18 @@ App Store 的截图不是 UI 展示，是转化工具。每张图只卖一个感
 
 ---
 
+## 示例输出
+
+以下是使用本 Skill 为 **Moodbean**（情绪追踪 APP）生成的 5 张宣传图：
+
+![Moodbean App Store Screenshots Demo](preview.png)
+
+以下是使用本 Skill 为 **Tesla**（电动车 APP）生成的 5 张宣传图：
+
+![Tesla App Store Screenshots Demo](preview_tesla.png)
+
+---
+
 ## 工作流程
 
 ```
@@ -111,24 +123,6 @@ Claude 会立即开始分析截图，无需任何其他配置。
 | iPhone 6.1" | 1125 × 2436 | 覆盖标准机型 |
 
 所有尺寸在浏览器工具栏中一键切换，点击 **Export All** 批量下载。
-
----
-
-## 示例输出
-
-以下是使用本 Skill 为 **Moodbean**（情绪追踪 APP）生成的 5 张宣传图：
-
-![Moodbean App Store Screenshots Demo](preview.png)
-
-![Tesla App Store Screenshots Demo](preview_tesla.png)
-
-| 幻灯 | 标题 | 风格 |
-|------|------|------|
-| 01 — Hero | Know how you feel. | warm-playful，居中手机 |
-| 02 — 差异化 | Someone who listens. | sage green，角色浮动 |
-| 03 — 功能 | Find your calm. | 暖琥珀色，手机偏右 |
-| 04 — 信任 | Every day counts. | **深色对比**，手机居中 |
-| 05 — 总结 | And so much more. | 无手机，功能胶囊 |
 
 ---
 
@@ -234,6 +228,18 @@ App Store screenshots are conversion tools, not UI showcases. Each image sells o
 | `dark-premium` | Tech, gaming, finance apps | Dark background + glow, premium |
 | `gradient-vivid` | Social, entertainment, youth apps | Saturated gradients, energetic |
 | `flat-pastel` | Health, lifestyle, women-focused apps | Pastel palette, soothing |
+
+---
+
+## Example Output
+
+**Moodbean** — mood tracking app, `warm-playful` style:
+
+![Moodbean App Store Screenshots Demo](preview.png)
+
+**Tesla** — EV companion app, `dark-premium` style:
+
+![Tesla App Store Screenshots Demo](preview_tesla.png)
 
 ---
 
