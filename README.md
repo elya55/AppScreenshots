@@ -120,6 +120,8 @@ Claude 会立即开始分析截图，无需任何其他配置。
 
 ![Moodbean App Store Screenshots Demo](preview.png)
 
+![Tesla App Store Screenshots Demo](preview_tesla.png)
+
 | 幻灯 | 标题 | 风格 |
 |------|------|------|
 | 01 — Hero | Know how you feel. | warm-playful，居中手机 |
