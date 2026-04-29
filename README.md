@@ -122,7 +122,7 @@ Claude 会立即开始分析截图，无需任何其他配置。
 
 以下是使用本 Skill 为 **Moodbean**（情绪追踪 APP）生成的 5 张宣传图：
 
-![Moodi App Store Screenshots Demo](preview.png)
+![Moodbean App Store Screenshots Demo](preview.png)
 
 | 幻灯 | 标题 | 风格 |
 |------|------|------|
