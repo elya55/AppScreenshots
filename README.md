@@ -16,17 +16,13 @@ App Store 的截图不是 UI 展示，是转化工具。每张图只卖一个感
 
 ---
 
-## 与同类 Skill 的区别
+## 5 种核心特点
 
-| 能力 | 普通版 | AppScreen |
-|------|--------|-----------|
-| 启动方式 | 先问 15 个问题 | **先分析截图，再问 5 个** |
-| 截图理解 | 手动告知每张内容 | **Vision 自动识别屏幕类型 + 叙事角色** |
-| 设计风格 | 3 种基础主题 | **5 种命名风格**（见下方） |
-| 文案语言 | 英文为主 | **中英双语，各有写作规则** |
-| IP 形象 | 无规范 | **吉祥物/角色使用规范**（位置/大小/场景） |
-| 文件命名 | 容易混乱 | **强制零填充重命名**（01.png, 02.png…） |
-| 字体系统 | 单一字体 | **中英双字体**（Noto Sans SC + 风格英文字体） |
+- **启动方式** — 上传截图，先分析截图，再询问 5 个问题
+- **截图理解** — 通过 AI 分析图表达的内容、叙事角色、设计调性
+- **设计风格** — 5 种设计风格
+- **文案语言** — 中英多语言版本，各有写作规则
+- **IP 形象** — 若有 IP 形象/吉祥物等，可插入介绍图片中
 
 ---
 
@@ -217,17 +213,13 @@ App Store screenshots are conversion tools, not UI showcases. Each image sells o
 
 ---
 
-## What Makes It Different
+## 5 Key Features
 
-| Capability | Generic Skill | AppScreen |
-|------------|--------------|-----------|
-| Startup flow | Asks 15 questions upfront | **Analyzes screenshots first, asks 5 questions** |
-| Screenshot understanding | You describe each screen manually | **Vision auto-detects screen type + narrative role** |
-| Design styles | 3 basic themes | **5 named styles** (see below) |
-| Copy language | English only | **Chinese + English, each with its own rules** |
-| Mascot / IP | No guidance | **Character placement spec** (position / size / scene) |
-| File naming | Often confusing | **Auto zero-padded rename** (01.png, 02.png…) |
-| Font system | Single font | **Dual-language fonts** (Noto Sans SC + style font) |
+- **Startup flow** — Upload screenshots first; AI analyzes them, then asks only 5 questions
+- **Screenshot understanding** — AI reads the content, narrative role, and design tone from each image
+- **Design styles** — 5 named styles to choose from
+- **Copy language** — Multi-language support (Chinese & English), each with its own writing rules
+- **Mascot / IP** — If you have a mascot or character, it can be placed inside the slides
 
 ---
 
