@@ -2,7 +2,7 @@
 
 **一个更聪明的 Claude Code Skill，帮你把 APP 原始截图变成应用商店宣传图。**
 
-发 3-8 张截图，Claude 自动分析内容、提炼卖点、生成文案、搭建项目、导出成品。
+发 3-8 张截图，Claude 自动分析内容、提炼卖点、生成文案、搭建项目、导出成品。可提供 App ID 或 App 名称，自动通过 iTunes API 拉取图标和 App 元数据。
 
 [English](#english) · 中文
 
@@ -16,9 +16,10 @@ App Store 的截图不是 UI 展示，是转化工具。每张图只卖一个感
 
 ---
 
-## 5 种核心特点
+## 6 种核心特点
 
 - **启动方式** — 上传截图，先分析截图，再询问 5 个问题
+- **iTunes 自动补全** — 提供 App ID 或名称，自动拉取图标、品类、简介，跳过手动填写
 - **截图理解** — 通过 AI 分析图表达的内容、叙事角色、设计调性
 - **设计风格** — 5 种设计风格
 - **文案语言** — 中英多语言版本，各有写作规则
@@ -53,9 +54,14 @@ App Store 的截图不是 UI 展示，是转化工具。每张图只卖一个感
 ## 工作流程
 
 ```
-1. 你发来 3-8 张 APP 截图（+ 可选：图标、IP 形象）
+1. 你发来 3-8 张 APP 截图（+ 可选：App ID 或 App 名称、IP 形象）
    ↓
-2. Claude Vision 自动分析每张截图
+2a. [可选] iTunes 自动补全（有 App ID 或名称时）
+    · 通过 iTunes Lookup / Search API 拉取 App 元数据
+    · 自动下载 512×512 图标至 public/app-icon.png
+    · 预填 App 名称，品类辅助推荐风格
+   ↓
+2b. Claude Vision 自动分析每张截图
    · 屏幕类型识别（home / chat / feature / celebration…）
    · 品牌色提取
    · 推荐叙事角色（Hero / 差异化 / 功能 / 信任 / 总结）
@@ -209,9 +215,10 @@ App Store screenshots are conversion tools, not UI showcases. Each image sells o
 
 ---
 
-## 5 Key Features
+## 6 Key Features
 
 - **Startup flow** — Upload screenshots first; AI analyzes them, then asks only 5 questions
+- **iTunes auto-fill** — Provide an App ID or name; icon + metadata are fetched automatically via iTunes API
 - **Screenshot understanding** — AI reads the content, narrative role, and design tone from each image
 - **Design styles** — 5 named styles to choose from
 - **Copy language** — Multi-language support (Chinese & English), each with its own writing rules
@@ -246,15 +253,20 @@ App Store screenshots are conversion tools, not UI showcases. Each image sells o
 ## How It Works
 
 ```
-1. You send 3-8 app screenshots (+ optional: icon, mascot)
+1. You send 3-8 app screenshots (+ optional: App ID or App name, mascot)
    ↓
-2. Claude Vision analyzes each screenshot automatically
-   · Screen type detection (home / chat / feature / celebration…)
-   · Brand color extraction
-   · Narrative role suggestion (Hero / Differentiator / Feature / Trust / Summary)
-   · Recommended slide order
+2a. [Optional] iTunes auto-fill (when App ID or name is provided)
+    · Lookup or search via iTunes API
+    · App icon (512×512) auto-downloaded to public/app-icon.png
+    · App name pre-filled; genre used to suggest a style
    ↓
-3. Claude asks only 5 questions
+2b. Claude Vision analyzes each screenshot automatically
+    · Screen type detection (home / chat / feature / celebration…)
+    · Brand color extraction
+    · Narrative role suggestion (Hero / Differentiator / Feature / Trust / Summary)
+    · Recommended slide order
+   ↓
+3. Claude asks only 5 questions (fewer if iTunes data was fetched)
    App name / Target store / Copy language / Slide count / Style
    ↓
 4. Copy is generated (3 options per slide, bilingual, you approve before code starts)
